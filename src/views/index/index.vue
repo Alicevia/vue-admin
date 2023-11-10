@@ -1,7 +1,7 @@
 <template>
-  <div class="h-full flex-1">
-    <div v-for="i of 4"></div>
-  </div>
+<div class="h-full flex-1">
+  <div v-for="i of 4"></div>
+</div>
 </template>
 
 <script setup>

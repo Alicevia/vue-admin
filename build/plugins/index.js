@@ -25,7 +25,7 @@ export const plugins = [
     imports: ['vue', 'vue-router'],
     eslintrc: {
       enabled: true,
-      filepath: '../../.eslintrc-auto-import.json',
+      filepath: './eslintrc-auto-import.json',
       globalsPropValue: 'readonly',
     },
   }),

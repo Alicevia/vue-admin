@@ -2,8 +2,8 @@ export default {
   trailingComma: 'es5',
   tabWidth: 2,
   semi: false,
-  singleQuote: true,
+  // singleQuote: true,
   // bracketSameLine: true,
-  // htmlWhitespaceSensitivity: 'ignore',
+  htmlWhitespaceSensitivity: 'ignore',
   // singleAttributePerLine: true,
 }
