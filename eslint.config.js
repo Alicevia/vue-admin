@@ -4,6 +4,7 @@ import { FlatCompat } from '@eslint/eslintrc'
 import path from 'path'
 import { fileURLToPath } from 'node:url'
 import autoImportApi from './eslintrc-auto-import.json' assert { type: 'json' }
+
 // mimic CommonJS variables -- not needed if using CommonJS
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -19,6 +20,18 @@ export default [
     files: ['**/*.vue'],
     rules: {
       'vue/multi-word-component-names': 'off',
+      'vue/html-self-closing': [
+        'error',
+        {
+          html: {
+            void: 'never',
+            normal: 'never',
+            component: 'never',
+          },
+          svg: 'always',
+          math: 'always',
+        },
+      ],
       'vue/html-closing-bracket-newline': [
         'error',
         {
@@ -65,6 +78,7 @@ export default [
     languageOptions: {
       globals: {
         ...globals.browser,
+        ...globals.commonjs,
         ...autoImportApi.globals,
       },
     },

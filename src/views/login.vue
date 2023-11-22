@@ -3,12 +3,12 @@
 		<a-form ref="formRef" :model="form" :style="{ width: '600px' }">
 			<a-form-item field="name" label="Username" :rules="rules">
 				<a-input v-model="form.name" a="232;lk" sdfljk="'asdfljk laksdjf'"
-					placeholder="please enter your username..." />
+					placeholder="please enter your username..."></a-input>
 			</a-form-item>
 			<a-form-item field="post"
 				label="Post">
 				<a-input v-model="form.post"
-					placeholder="please enter your post..." />
+					placeholder="please enter your post..."></a-input>
 			</a-form-item>
 			<a-form-item field="isRead">
 				<a-checkbox v-model="form.isRead">
@@ -28,7 +28,6 @@
 definePage({
   layout: false,
 })
-const a = 23
 const formRef = ref()
 const form = reactive({
   name: "",
