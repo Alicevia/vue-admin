@@ -30,8 +30,8 @@ definePage({
 })
 const formRef = ref()
 const form = reactive({
-  name: "",
-  post: "",
+  name: '',
+  post: '',
   isRead: false,
 })
 const rules = [
@@ -39,8 +39,8 @@ const rules = [
     validator: (value, cb) => {
       return new Promise((resolve) => {
         window.setTimeout(() => {
-          if (value !== "admin") {
-            cb("name must be admin")
+          if (value !== 'admin') {
+            cb('name must be admin')
           }
           resolve()
         }, 2000)
@@ -51,12 +51,12 @@ const rules = [
 const handleClick = () => {
   formRef.value.setFields({
     name: {
-      status: "error",
-      message: "async name error",
+      status: 'error',
+      message: 'async name error',
     },
     post: {
-      status: "error",
-      message: "valid post",
+      status: 'error',
+      message: 'valid post',
     },
   })
 }

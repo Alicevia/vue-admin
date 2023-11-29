@@ -42,19 +42,7 @@ export default {
       white: `var(--color-white)`,
       transparent: 'transparent',
       black20: 'rgba(0,0,0,0.2)',
-
-      gc: {
-        primary: 'rgba(var(--gc-primary))',
-        primary80: 'rgba(var(--gc-primary),0.8)',
-        primary50: 'rgba(var(--gc-primary),0.5)',
-        primary30: 'rgba(var(--gc-primary),0.3)',
-        primary10: 'rgba(var(--gc-primary),0.1)',
-        red: '#F20F0F',
-        orange: '#f94e04',
-        blue: '#2586A4',
-        cyan: '#00E5C9',
-        text: 'rgba(234,223,223,1)',
-      },
+ 
     },
     extend: {},
   },

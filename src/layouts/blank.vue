@@ -3,6 +3,7 @@
 </template>
 
 <script setup>
+
+const a = "23"
 </script>
-<style scoped>
-</style>
+<style scoped></style>

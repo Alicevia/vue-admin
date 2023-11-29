@@ -6,11 +6,12 @@
 					<component :is="Component"></component>
 				</keep-alive>
 			</transition>
-		</router-view>
-	</a-config-provider>
+		</router-view>  
+	</a-config-provider>   
 </template>
 
 <script setup>
-
+import { useThemeStore } from './store/theme'
+useThemeStore()
 </script>
 <style scoped></style>
