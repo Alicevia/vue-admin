@@ -14,4 +14,9 @@
   "[javascriptreact]": {
     "editor.defaultFormatter": "dbaeumer.vscode-eslint"
   },
+  "path-intellisense.mappings": {
+    "@": "${workspaceRoot}/src",
+    "hooks": "${workspaceRoot}/src/hooks",
+    "components": "${workspaceRoot}/src/components"
+  },
 }

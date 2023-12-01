@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ES6", // 设置编译目标为 ES6。
+    "module": "ESNext", // 设置模块为 commonjs。
+    "moduleResolution": "bundler",
+    "checkJs": false,
+    "allowSyntheticDefaultImports": true, // 允许 synthetic default imports，这允许在导入时省略文件名。
+    "baseUrl": "./", // 设置基础URL为当前目录（./）。
+    "paths": {
+      "@/*": [
+        "src/*"
+      ] // 设置路径映射，将 @/* 映射到 src/*
+    }
+  },
+  "include": [ // 设置要包含的文件，这里设置了包含 src 目录下的所有文件。
+    "src/**/*"
+  ],
+  "exclude": [ // 设置要排除的文件，这里设置了排除 node_modules 目录。
+    "node_modules"
+  ]
+}
