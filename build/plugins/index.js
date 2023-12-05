@@ -8,7 +8,7 @@ import AutoImportApi from 'unplugin-auto-import/vite'
 export const plugins = [
   VueRouter({
     routesFolder: 'src/views',
-    exclude: ['**/components/**/*.vue'],
+    exclude: ['**/components/**/*.(vue|jsx)'],
     extensions: ['.vue', '.jsx'],
   }),
   vue(),

@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "jsx": "preserve",
     "target": "ES6", // 设置编译目标为 ES6。
     "module": "ESNext", // 设置模块为 commonjs。
     "moduleResolution": "bundler",

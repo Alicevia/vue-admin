@@ -1,5 +1,5 @@
 <template>
-	<a-card hoverable style="height: 100%;">
+	<p-table :columns="columns" :data="data" :pagination="pagination">
 		<template #title>
 			<a-button type="primary">
 				新建
@@ -22,34 +22,16 @@
 				</a-button>
 			</a-space>
 		</template>
-		<a-table :scroll="scroll" :pagination="pagination" :columns="columns"
-			:data="data">
-			<template #name="{ rowIndex }">
-				<a-input v-model="data[rowIndex].name"></a-input>
-			</template>
-			<template #province="{ rowIndex }">
-				<a-select v-model="data[rowIndex].province" @change="()=>handleChange(rowIndex)">
-					<a-option v-for="value of Object.keys(options)">
-						{{ value }}
-					</a-option>
-				</a-select>
-			</template>
-			<template #city="{ rowIndex }">
-				<a-select v-model="data[rowIndex].city" :options="options[data[rowIndex].province] || []"></a-select>
-			</template>
-		</a-table>
-	</a-card>
+	</p-table>
 </template>
  
 
 <script setup>
 import { computed, reactive } from 'vue'
-import { useElementSize, useCurrentElement } from '@vueuse/core'
 definePage({
   title: '表格展示',
   icon: () => import('@arco-design/web-vue/es/icon/icon-list'),
 })
-const { height }=useElementSize(useCurrentElement())
 
 
 const options = {
@@ -84,9 +66,7 @@ const pagination = reactive({
   current: 1,
   pageSize: 20,
 })
-const scroll = reactive({
-  y: computed(() => height.value-168), 
-})
+
 const data = reactive(new Array(40).fill(0).map((_, i) => {
   return {
     key: i+1,

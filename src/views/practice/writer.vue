@@ -6,7 +6,7 @@
 		<a-button @click="pause">
 			暂停
 		</a-button>
-		<a-button @click="resetHandle">
+		<a-button @click="reset">
 			重置
 		</a-button>
 		{{ writer }}
@@ -29,11 +29,7 @@ const data = ref(`
  
 const { writer, reset, resume, pause }=useTypewriter(data)
 
-const resetHandle =() => {
-  reset()
-  pause()
-  writer.value=''
-}
+
 </script>
 <style scoped>
 </style>
