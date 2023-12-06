@@ -6,7 +6,20 @@
 					<icon-xigua-color></icon-xigua-color> ALICEVIA SYSTEM
 				</template>
 				<template #subtitle>
-					刷新
+					<a-breadcrumb>
+						<template #separator>
+							<icon-right></icon-right>
+						</template>
+
+						<a-breadcrumb-item v-for="item of breadcrumbList" :key="item.name">
+							<a-trigger trigger="hover">
+								<span>{{ item.title }}</span>
+								<template #content>
+									<component :is="renderMenuListInBreadcrumb([item])"></component>
+								</template>
+							</a-trigger>
+						</a-breadcrumb-item>
+					</a-breadcrumb>
 				</template>
 				<template #extra>
 					<a-space>
@@ -39,10 +52,12 @@
 		<a-layout class="overflow-hidden">
 			<a-layout-sider v-model:collapsed="collapsed" collapsible>
 				<a-scrollbar style="overflow: auto" class="h-[calc(100vh-112px)]">
-					<component :is="renderMenuList"></component>
+					<component :is="renderMenuList(userStore.menuList)"></component>
 				</a-scrollbar>
 			</a-layout-sider>
-			<a-layout-content>
+			<a-layout-content class="flex flex-col p-2 gap-2">
+				<nav-record></nav-record>
+
 				<router-view v-slot="{ Component }">
 					<keep-alive>
 						<component :is="Component"></component>
@@ -59,12 +74,49 @@ import { Menu, MenuItem, SubMenu } from '@arco-design/web-vue'
 import { Suspense, computed, defineAsyncComponent, h, onActivated, reactive, watch, watchEffect } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useFullscreen } from '@vueuse/core'
+import NavRecord from './components/nav-record.vue'
 
 const { isFullscreen,  toggle } = useFullscreen(document.documentElement)
 const userStore = useUserStore()
 const themeStore = useThemeStore()
 const router = useRouter()
 const route = useRoute()
+
+const findMenuByName = (menu, name) => {
+  return menu.find(item => {
+    if(item.name==name) return true
+    if(item.children) return !!findMenuByName(item.children, name)
+  })
+}
+ 
+const breadcrumbList = computed(() => {
+  const [name]=menuState.selectedKeys
+  if(!currentMenu.value) return []
+ 
+  return flatMenu([currentMenu.value], name)??[]
+})
+ 
+const flatMenu = (menu, name, data=[]) => {
+  for (let index = 0; index < menu.length; index++) {
+    const item = menu[index]
+    data.push(item)
+    if(item.name==name) return data
+    if(item.children){
+      
+      let res =  flatMenu(item.children, name, data)
+      if(res){
+        return res
+      }
+    }
+    data.pop()
+  }
+}
+
+
+const currentMenu = computed(() => {
+  const [name]=menuState.selectedKeys
+  return  findMenuByName(userStore.routes, name)
+})
 
 const collapsed = ref(false)
 const menuState = reactive({
@@ -87,20 +139,25 @@ watchEffect(() => {
   menuState.openKeys= matchedPath.slice(0, -1)
 })
 
-const renderMenuList = () => {
+const renderMenuList = (menuList) => {
   return h(Menu, menuState,
-    () => userStore.menuList.map(renderMenuItem))
+    () => menuList.map((item) => renderMenuItem(item)))
 }
-const renderMenuItem = (menu) => {
+const renderMenuListInBreadcrumb = (menuList) => {
+  return h(Menu, { mode: 'pop',  onMenuItemClick: menuState.onMenuItemClick },
+    () => menuList.map((item) => renderMenuItem(item, false)))
+}
+
+const renderMenuItem = (menu, renderIcon=true) => {
   if (menu.children) {
     return h(SubMenu, { title: menu.title, key: menu.name }, {
-      default: () => menu.children.map(renderMenuItem),
-      icon: () => suspense(menu.icon),
+      default: () => menu.children.map((item) => renderMenuItem(item, renderIcon)),
+      icon: renderIcon? () => suspense(menu.icon):null,
     })
   }
   return h(MenuItem, { key: menu.name }, {
     default: () => menu.title,
-    icon: () => suspense(menu.icon),
+    icon: renderIcon?() => suspense(menu.icon):null,
   })
 }
 

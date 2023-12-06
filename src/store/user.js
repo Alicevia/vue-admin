@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 
 const generateMenuList = (routes) => {
   return routes.filter((item) => {
-    if (item.title) {
+    if (item.title && item.isMenu !==false) {
       if (item.children && item.children.length > 0) {
         item.children = generateMenuList(item.children)
       }
@@ -15,5 +15,5 @@ export const useUserStore = defineStore('user', () => {
   const menuList = computed(() => {
     return generateMenuList(routes)
   })
-  return { menuList }
+  return { menuList, routes }
 })

@@ -12,6 +12,10 @@
 
 <script setup lang="jsx">
 
+definePage({
+  title: 'ErrorPage',
+  isMenu: false,
+})
 const router = useRouter()
 
 const goHome = () => {

@@ -6,5 +6,5 @@ export const router = createRouter({
   history: createWebHistory(),
   extendRoutes: setupLayouts,
 })
-console.log(setupLayouts(routes))
+
 export { routes }
