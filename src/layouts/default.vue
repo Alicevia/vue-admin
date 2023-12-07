@@ -1,61 +1,71 @@
 <template>
-	<a-layout class="h-full">
-		<a-layout-header class=" bg-fbase">
-			<a-page-header :show-back="false">
-				<template #title>
-					<icon-xigua-color></icon-xigua-color> ALICEVIA SYSTEM
-				</template>
-				<template #subtitle>
-					<a-breadcrumb>
-						<template #separator>
-							<icon-right></icon-right>
-						</template>
+	<a-layout class="h-full gap-3 bg-fbase">
+		<a-layout-sider v-model:collapsed="collapsed" collapsible>
+			<div class="flex gap-2 justify-center items-center p-2 font-bold 
+       text-xl  text-title overflow-hidden">
+				<icon-xigua-color></icon-xigua-color><span v-if="!collapsed"> ALICEVIA </span>
+			</div>
+			<a-scrollbar style="overflow: auto" class="h-[calc(100vh-112px)]">
+				<component :is="renderMenuList(userStore.menuList)"></component>
+			</a-scrollbar>
+		</a-layout-sider>
+		<a-layout class="overflow-hidden  gap-2">
+			<a-layout-header class=" bg-over1">
+				<a-page-header :show-back="false">
+					<template #title>
+						<a-button shape="round" @click="collapsed=!collapsed">
+							<IconCaretRight v-if="collapsed"></IconCaretRight>
+							<IconCaretLeft v-else></IconCaretLeft>
+						</a-button>
+					</template>
+					<template #subtitle>
+						<a-breadcrumb>
+							<template #separator>
+								<icon-right></icon-right>
+							</template>
 
-						<a-breadcrumb-item v-for="item of breadcrumbList" :key="item.name">
-							<a-trigger trigger="hover">
-								<span>{{ item.title }}</span>
-								<template #content>
-									<component :is="renderMenuListInBreadcrumb([item])"></component>
+							<a-breadcrumb-item v-for="item of breadcrumbList" :key="item.name">
+								<a-trigger trigger="hover">
+									<span>{{ item.title }}</span>
+									<template #content>
+										<component :is="renderMenuListInBreadcrumb([item])"></component>
+									</template>
+								</a-trigger>
+							</a-breadcrumb-item>
+						</a-breadcrumb>
+					</template>
+					<template #extra>
+						<a-space>
+							<template #split>
+								<a-divider direction="vertical"></a-divider>
+							</template>
+							<a-button shape="circle" @click="toggle">
+								<template #icon>
+									<icon-fullscreen-exit v-if="isFullscreen"></icon-fullscreen-exit> 
+									<icon-fullscreen v-else></icon-fullscreen>
 								</template>
-							</a-trigger>
-						</a-breadcrumb-item>
-					</a-breadcrumb>
-				</template>
-				<template #extra>
-					<a-space>
-						<a-button shape="circle" @click="toggle">
-							<template #icon>
-								<icon-fullscreen-exit v-if="isFullscreen"></icon-fullscreen-exit> 
-								<icon-fullscreen v-else></icon-fullscreen>
-							</template>
-						</a-button>
-						<a-button shape="circle" @click="themeStore.toggleTheme()">
-							<template #icon>
-								<icon-sun-fill v-if="themeStore.isDark"></icon-sun-fill>
-								<icon-moon-fill v-else></icon-moon-fill> 
-							</template>
-						</a-button>
-						<a-dropdown position="bl" trigger="hover">
-							<a-avatar :size="30" :style="{ backgroundColor: '#14a9f8' }">
-								<IconUser></IconUser>
-							</a-avatar>
-							<template #content>
-								<a-doption>个人中心</a-doption>
-								<a-doption>退出</a-doption>
-							</template>
-						</a-dropdown>
-					</a-space>
-				</template>
-			</a-page-header>
-		</a-layout-header>
-    
-		<a-layout class="overflow-hidden">
-			<a-layout-sider v-model:collapsed="collapsed" collapsible>
-				<a-scrollbar style="overflow: auto" class="h-[calc(100vh-112px)]">
-					<component :is="renderMenuList(userStore.menuList)"></component>
-				</a-scrollbar>
-			</a-layout-sider>
-			<a-layout-content class="flex flex-col p-2 gap-2">
+							</a-button>
+							<a-button shape="circle" @click="themeStore.toggleTheme()">
+								<template #icon>
+									<icon-sun-fill v-if="themeStore.isDark"></icon-sun-fill>
+									<icon-moon-fill v-else></icon-moon-fill> 
+								</template>
+							</a-button>
+							<span>ALICEVIA</span>
+							<a-dropdown position="bl" trigger="hover">
+								<a-avatar :size="30" :style="{ backgroundColor: '#14a9f8' }">
+									<IconUser></IconUser>
+								</a-avatar>
+								<template #content>
+									<a-doption>个人中心</a-doption>
+									<a-doption>退出</a-doption>
+								</template>
+							</a-dropdown>
+						</a-space>
+					</template>
+				</a-page-header>
+			</a-layout-header>
+			<a-layout-content class="flex flex-col gap-2">
 				<nav-record></nav-record>
 
 				<router-view v-slot="{ Component }">

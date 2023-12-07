@@ -6,9 +6,10 @@
 			</template>
 		</a-button>
 		<div ref="tagsRef" class="flex gap-2 flex-1 overflow-hidden">
-			<a-tag v-for="(item) in tagList" :key="item.title" :checked="item.title==currentTag.select?.title"
+			<a-tag v-for="(item) in tagList" :key="item.title" 
+				:checked="item.title==currentTag.select?.title"
 				checkable
-				class="!h-[28px] flex-shrink-0"
+				class="!h-[28px] flex-shrink-0 "
 				:closable="!currentTag.isOnlyOne" size="medium" @close="removeTag(item)"
 				@check="selectTag(item)">
 				{{ item.title }}

@@ -39,7 +39,7 @@ export default {
       over2: `var(--color-bg-3)`,
       over3: `var(--color-bg-4)`,
       popup: `var(--color-bg-5)`,
-      white: `var(--color-white)`,
+      inversion: `var(--color-bg-white)`,
       transparent: 'transparent',
       black20: 'rgba(0,0,0,0.2)',
  

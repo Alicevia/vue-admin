@@ -1,5 +1,5 @@
 <template>
-	<div class="h-full flex-1 ">
+	<div class="h-full flex-1">
 		<a-x></a-x>
 	</div>
 </template>
