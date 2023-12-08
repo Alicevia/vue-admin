@@ -22,7 +22,7 @@ html,body,#app {
   height: 100%;
   overflow: hidden;
   font-family:  Arial, Helvetica, sans-serif;
-  @apply bg-over;
-  @apply text-content;
+  @apply bg-page;
+  @apply text-primary;
 }
 

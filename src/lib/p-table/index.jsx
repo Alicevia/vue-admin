@@ -1,6 +1,6 @@
 import { defineComponent } from 'vue'
 import { useElementSize, useCurrentElement } from '@vueuse/core'
-import { Table } from '@arco-design/web-vue'
+import { Table } from 'tdesign-vue-next'
 
 
 export default defineComponent(function  (props, { slots, attrs }){
@@ -15,10 +15,10 @@ export default defineComponent(function  (props, { slots, attrs }){
     }), 
   })
   
-  return () => <a-card {...attrs} v-slots={slots} class='h-full'>
+  return () => <t-card {...attrs} v-slots={slots} class='h-full'>
       
-    <a-table  {...props} scroll={scroll}  v-slots={slots}></a-table>
-  </a-card>
+    <t-table  {...props} scroll={scroll}  v-slots={slots}></t-table>
+  </t-card>
  
 }, {
   name: 'PTable',

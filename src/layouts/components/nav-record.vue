@@ -1,39 +1,54 @@
 <template>
 	<div ref="root" class="flex gap-2 overflow-hidden">
-		<a-button v-show="leftArrow" class=" shrink-0" @click="moveLeft">
+		<t-button v-show="leftArrow" theme="default" variant="base"
+			shape="square" class="shrink-0"
+			@click="moveLeft">
 			<template #icon>
-				<icon-left></icon-left>
+				<ChevronLeftIcon></ChevronLeftIcon>
 			</template>
-		</a-button>
+		</t-button>
 		<div ref="tagsRef" class="flex gap-2 flex-1 overflow-hidden">
-			<a-tag v-for="(item) in tagList" :key="item.title" 
+			<t-tag v-for="(item) in tagList" :key="item.title" 
 				:checked="item.title==currentTag.select?.title"
 				checkable
 				class="!h-[28px] flex-shrink-0 "
 				:closable="!currentTag.isOnlyOne" size="medium" @close="removeTag(item)"
 				@check="selectTag(item)">
 				{{ item.title }}
-			</a-tag>
+			</t-tag>
 		</div>
-		<a-button v-show="rightArrow" class=" shrink-0" @click="moveRight">
+		<t-button v-show="rightArrow" theme="default" variant="base"
+			shape="square" class=" shrink-0"
+			@click="moveRight">
 			<template #icon>
-				<icon-right></icon-right>
+				<ChevronRightIcon></ChevronRightIcon>
 			</template>
-		</a-button>
-		<a-dropdown trigger="hover" position="bl">
-			<a-button class="ml-auto shrink-0">
+		</t-button>
+		<t-dropdown trigger="hover" position="bl">
+			<t-button theme="default" shape="square" variant="base"
+				class="ml-auto shrink-0">
 				<template #icon>
-					<icon-down></icon-down>
+					<ChevronDownIcon></ChevronDownIcon>
 				</template>
-			</a-button>
-			<template #content>
-				<a-doption>刷新</a-doption>
-				<a-doption>关闭当前</a-doption>
-				<a-doption>关闭其他</a-doption>
-				<a-doption>关闭左侧</a-doption>
-				<a-doption>关闭右侧</a-doption>
+			</t-button>
+			<template #dropdown>
+				<t-button>
+					刷新
+				</t-button>
+				<t-button>
+					关闭当前
+				</t-button>
+				<t-button>
+					关闭其他
+				</t-button>
+				<t-button>
+					关闭左侧
+				</t-button>
+				<t-button>
+					关闭右侧
+				</t-button>
 			</template>
-		</a-dropdown>
+		</t-dropdown>
 	</div>
 </template>
 

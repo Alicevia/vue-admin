@@ -1,26 +1,26 @@
 <template>
 	<p-table :columns="columns" :data="data" :pagination="pagination">
 		<template #title>
-			<a-button type="primary">
+			<t-button type="primary">
 				新建
-			</a-button>
+			</t-button>
 		</template>
 		<template #extra>
-			<a-space>
-				<a-button type="primary">
+			<t-space>
+				<t-button type="primary">
 					刷新数据
-				</a-button>
-				<a-button shape="circle"> 
+				</t-button>
+				<t-button shape="circle"> 
 					<template #icon>
-						<icon-refresh></icon-refresh>
+						<RefreshIcon></RefreshIcon>
 					</template>
-				</a-button>
-				<a-button shape="circle">
+				</t-button>
+				<t-button shape="circle">
 					<template #icon>
-						<icon-settings></icon-settings>
+						<Setting1Icon></Setting1Icon>
 					</template>
-				</a-button>
-			</a-space>
+				</t-button>
+			</t-space>
 		</template>
 	</p-table>
 </template>
@@ -30,7 +30,7 @@
 import { computed, reactive } from 'vue'
 definePage({
   title: '表格展示',
-  icon: () => import('@arco-design/web-vue/es/icon/icon-list'),
+  icon: () => 23,
 })
 
 

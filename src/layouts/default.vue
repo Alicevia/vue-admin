@@ -1,71 +1,76 @@
 <template>
-	<a-layout class="h-full gap-3 bg-fbase">
-		<a-layout-sider v-model:collapsed="collapsed" collapsible>
+	<t-layout class="h-full gap-3 bg-fbase">
+		<t-aside v-model:collapsed="collapsed" collapsible>
 			<div class="flex gap-2 justify-center items-center p-2 font-bold 
        text-xl  text-title overflow-hidden">
-				<icon-xigua-color></icon-xigua-color><span v-if="!collapsed"> ALICEVIA </span>
+				<LogoAppleFilledIcon></LogoAppleFilledIcon><span v-if="!collapsed"> ALICEVIA </span>
 			</div>
-			<a-scrollbar style="overflow: auto" class="h-[calc(100vh-112px)]">
-				<component :is="renderMenuList(userStore.menuList)"></component>
-			</a-scrollbar>
-		</a-layout-sider>
-		<a-layout class="overflow-hidden  gap-2">
-			<a-layout-header class=" bg-over1">
-				<a-page-header :show-back="false">
+			<div style="overflow: auto" class="h-[calc(100vh-112px)]">
+				<!-- <component :is="renderMenuList(userStore.menuList)"></component> -->
+			</div>
+		</t-aside>
+		<t-layout class="overflow-hidden  gap-2">
+			<t-header class=" bg-over1">
+				<!-- <div :show-back="false">
 					<template #title>
-						<a-button shape="round" @click="collapsed=!collapsed">
+						<t-button shape="round" @click="collapsed=!collapsed">
 							<IconCaretRight v-if="collapsed"></IconCaretRight>
 							<IconCaretLeft v-else></IconCaretLeft>
-						</a-button>
+						</t-button>
 					</template>
 					<template #subtitle>
-						<a-breadcrumb>
+						<t-breadcrumb>
 							<template #separator>
-								<icon-right></icon-right>
+						<ChevronRightIcon />
 							</template>
 
-							<a-breadcrumb-item v-for="item of breadcrumbList" :key="item.name">
-								<a-trigger trigger="hover">
+							<t-breadcrumb-item v-for="item of breadcrumbList" :key="item.name">
+								<t-trigger trigger="hover">
 									<span>{{ item.title }}</span>
 									<template #content>
 										<component :is="renderMenuListInBreadcrumb([item])"></component>
 									</template>
-								</a-trigger>
-							</a-breadcrumb-item>
-						</a-breadcrumb>
+								</t-trigger>
+							</t-breadcrumb-item>
+						</t-breadcrumb>
 					</template>
 					<template #extra>
-						<a-space>
+						<t-space>
 							<template #split>
-								<a-divider direction="vertical"></a-divider>
+								<t-divider direction="vertical">
+								</t-divider>
 							</template>
-							<a-button shape="circle" @click="toggle">
+							<t-button shape="circle" @click="toggle">
 								<template #icon>
-									<icon-fullscreen-exit v-if="isFullscreen"></icon-fullscreen-exit> 
-									<icon-fullscreen v-else></icon-fullscreen>
+									<fullscreen-exit-1 v-if="isFullscreen"></fullscreen-exit-1> 
+							<Fullscreen1Icon else />
 								</template>
-							</a-button>
-							<a-button shape="circle" @click="themeStore.toggleTheme()">
+							</t-button>
+							<t-button shape="circle" @click="themeStore.toggleTheme()">
 								<template #icon>
-									<icon-sun-fill v-if="themeStore.isDark"></icon-sun-fill>
-									<icon-moon-fill v-else></icon-moon-fill> 
+									<sunny v-if="themeStore.isDark"></sunny>
+									<moon v-else></moon> 
 								</template>
-							</a-button>
+							</t-button>
 							<span>ALICEVIA</span>
-							<a-dropdown position="bl" trigger="hover">
-								<a-avatar :size="30" :style="{ backgroundColor: '#14a9f8' }">
+							<t-dropdown position="bl" trigger="hover">
+								<t-avatar :size="30" :style="{ backgroundColor: '#14a9f8' }">
 									<IconUser></IconUser>
-								</a-avatar>
+								</t-avatar>
 								<template #content>
-									<a-doption>个人中心</a-doption>
-									<a-doption>退出</a-doption>
+									<t-buton>
+										个人中心
+									</t-buton>
+									<t-buton>
+										退出
+									</t-buton>
 								</template>
-							</a-dropdown>
-						</a-space>
+							</t-dropdown>
+						</t-space>
 					</template>
-				</a-page-header>
-			</a-layout-header>
-			<a-layout-content class="flex flex-col gap-2">
+				</div> -->
+			</t-header>
+			<t-content class="flex flex-col gap-2">
 				<nav-record></nav-record>
 
 				<router-view v-slot="{ Component }">
@@ -73,14 +78,14 @@
 						<component :is="Component"></component>
 					</keep-alive>
 				</router-view>  
-			</a-layout-content>
-		</a-layout>
-	</a-layout>
+			</t-content>
+		</t-layout>
+	</t-layout>
 </template>
 
 <script setup>
 import { useUserStore, useThemeStore } from '@/store'
-import { Menu, MenuItem, SubMenu } from '@arco-design/web-vue'
+import { Menu, MenuItem, Submenu } from 'tdesign-vue-next'
 import { Suspense, computed, defineAsyncComponent, h, onActivated, reactive, watch, watchEffect } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useFullscreen } from '@vueuse/core'
@@ -160,7 +165,7 @@ const renderMenuListInBreadcrumb = (menuList) => {
 
 const renderMenuItem = (menu, renderIcon=true) => {
   if (menu.children) {
-    return h(SubMenu, { title: menu.title, key: menu.name }, {
+    return h(Submenu, { title: menu.title, key: menu.name }, {
       default: () => menu.children.map((item) => renderMenuItem(item, renderIcon)),
       icon: renderIcon? () => suspense(menu.icon):null,
     })

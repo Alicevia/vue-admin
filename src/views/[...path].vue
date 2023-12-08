@@ -1,13 +1,13 @@
 <template>
-	<a-result status="404" subtitle="系统中不存在当前URL,请检查">
+	<t-result status="404" subtitle="系统中不存在当前URL,请检查">
 		<template #extra>
-			<a-space>
-				<a-button type="primary" @click="goHome">
+			<t-space>
+				<t-button type="primary" @click="goHome">
 					去首页
-				</a-button>
-			</a-space>
+				</t-button>
+			</t-space>
 		</template>
-	</a-result>
+	</t-result>
 </template>
 
 <script setup lang="jsx">
@@ -19,7 +19,6 @@ definePage({
 const router = useRouter()
 
 const goHome = () => {
-  console.log(router)
   router.replace({ path: '/test/test2/test3/test4' })
 }
  

@@ -1,16 +1,13 @@
 /** @type {import('tailwindcss').Config} */
 
-const colorKeys = ['primary', 'success', 'warning', 'danger', 'link']
+const colorKeys = ['brand', 'warning', 'error', 'success'  ]
 const colors = colorKeys.reduce((pre, name) => {
-  pre[name] = {
-    base: `rgb(var(--${name}-6))`,
-    hover: `rgb(var(--${name}-5))`,
-    click: `rgb(var(--${name}-7))`,
-    spec: `rgb(var(--${name}-4))`,
-    disabled: `rgb(var(--${name}-3))`,
-    tdisabled: `rgb(var(--${name}-2))`,
-    light: `rgb(var(--${name}-1))`,
-  }
+  const keys= ['hover', 'focus', 'active', 'disabled', 'light']
+  keys.forEach((key => {
+    pre[key]=`rgb(var(--td-${name}-color-${key}))`
+  }))
+  pre['base']=`rgb(var(--td-${name}-color))`
+  
   return pre
 }, {})
 export default {
@@ -19,27 +16,40 @@ export default {
     colors: {
       ...colors,
       // border
-      bbase: `var(--color-border-1)`,
-      bnormal: `var(--color-border-2)`,
-      bdeep: `var(--color-border-3)`,
-      bheavy: `var(--color-border-4)`,
-      // fill
-      fbase: `var(--color-fill-1)`,
-      fnormal: `var(--color-fill-2)`,
-      fdeep: `var(--color-fill-3)`,
-      fheavy: `var(--color-fill-4)`,
+      b1: `var(--td-gray-color-3)`,
+      b2: `var(--td-gray-color-4)`,
+  
       // text
-      title: `var(--color-text-1)`,
-      content: `var(--color-text-2)`,
-      desc: `var(--color-text-3)`,
-      assist: `var(--color-text-4)`,
+      primary: `var(--td-text-color-primary)`,
+      sec: `var(--td-text-color-secondary)`,
+      placeholder: `var(--td-text-color-placeholder)`,
+      disabled: `var(--td-text-color-disabled)`,
+      anti: `white`, 
+      brand: `var(--td-text-color-brand)`, 
+      link: `var(--td-text-color-link)`, 
+      // title: `var(--color-text-1)`,
+      // content: `var(--color-text-2)`,
+      // desc: `var(--color-text-3)`,
+      // assist: `var(--color-text-4)`,
       // bg
-      over: `var(--color-bg-1)`,
-      over1: `var(--color-bg-2)`,
-      over2: `var(--color-bg-3)`,
-      over3: `var(--color-bg-4)`,
-      popup: `var(--color-bg-5)`,
-      inversion: `var(--color-bg-white)`,
+      page: `var(--td-bg-color-page)`,
+      container: `var(--td-bg-color-container)`,
+      'container-hover': `var(--td-bg-color-container-hover)`,
+      'container-active': `var(--td-bg-color-container-active)`,
+      'container-select': `var(--td-bg-color-container-select)`,
+      container2: `var(--td-bg-color-secondarycontainer)`,
+      'container2-hover': `var(--td-bg-color-secondarycontainer-hover)`,
+      'container2-active': `var(--td-bg-color-secondarycontainer-active)`,
+      'container2-select': `var(--td-bg-color-secondarycontainer-select)`,
+      component: `var(--td-bg-color-component)`,
+      'component-hover': `var(--td-bg-color-component-hover)`,
+      'component-active': `var(--td-bg-color-component-active)`,
+      'component-disabled': `var(--td-bg-color-component-disabled)`,
+      'component-border': `var(--td-component-border)`,
+      component2: `var(--td-bg-color-secondarycomponent)`,
+      'component2-hover': `var(--td-bg-color-secondarycomponent-hover)`,
+      'component2-active': `var(--td-bg-color-secondarycomponent-active)`,
+
       transparent: 'transparent',
       black20: 'rgba(0,0,0,0.2)',
  

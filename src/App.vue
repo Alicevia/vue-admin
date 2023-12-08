@@ -1,5 +1,5 @@
 <template>
-	<a-config-provider :global="true" size="small">
+	<t-config-provider>
 		<router-view v-slot="{ Component }">
 			<transition mode="out-in">
 				<keep-alive>
@@ -7,7 +7,7 @@
 				</keep-alive>
 			</transition>
 		</router-view>  
-	</a-config-provider>   
+	</t-config-provider>   
 </template>
 
 <script setup>

@@ -1,6 +1,6 @@
 <template>
 	<div class="h-full flex-1">
-		<a-x></a-x>
+		23
 	</div>
 </template>
 
@@ -8,7 +8,7 @@
 
 definePage({
   title: '首页',
-  icon: () => import('@arco-design/web-vue/es/icon/icon-apps'),
+  icon: () => 23,
 })
  
  

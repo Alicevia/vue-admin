@@ -1,5 +1,7 @@
 import { createApp } from 'vue'
+import 'tdesign-vue-next/es/style/index.css'
 import './style/index.css'
+
 import App from './App.vue'
 import { pinia } from './store'
 import { router } from './router'

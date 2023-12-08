@@ -6,7 +6,7 @@
 <script setup>
 definePage({
   title: '组件展示',
-  icon: () => import('@arco-design/web-vue/es/icon/icon-list'),
+  icon: () => 323,
 })
 </script>
 <style scoped>

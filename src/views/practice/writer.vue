@@ -1,14 +1,14 @@
 <template>
 	<div class="whitespace-pre-wrap">
-		<a-button @click="resume">
+		<t-button @click="resume">
 			开始
-		</a-button>
-		<a-button @click="pause">
+		</t-button>
+		<t-button @click="pause">
 			暂停
-		</a-button>
-		<a-button @click="reset">
+		</t-button>
+		<t-button @click="reset">
 			重置
-		</a-button>
+		</t-button>
 		{{ writer }}
 	</div>
 </template>
@@ -17,7 +17,7 @@
 import { useTypewriter } from '@/hooks'
 definePage({
   title: '打字机',
-  icon: () => import('@arco-design/web-vue/lib/icon/icon-send'),
+  icon: () => 23,
 })
 
 const data = ref(`
