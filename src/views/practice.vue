@@ -4,8 +4,11 @@
 
 <script setup>
 definePage({
-  title: '练习室',
-  icon: () => 23,
+  meta: {
+    title: '练习室',
+  },
+
+  icon: () => import('tdesign-icons-vue-next/esm/components/relativity'),
 })
 </script>
 <style scoped>

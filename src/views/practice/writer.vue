@@ -16,8 +16,11 @@
 <script setup>
 import { useTypewriter } from '@/hooks'
 definePage({
+  meta: {
+    title: '打字机', 
+  },
   title: '打字机',
-  icon: () => 23,
+  icon: () => import('tdesign-icons-vue-next/esm/components/keyboard'),
 })
 
 const data = ref(`

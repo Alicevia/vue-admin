@@ -11,8 +11,11 @@
 
 <script setup>
 definePage({
+  meta: {
+    title: '拖拽排序', 
+  },
   title: '拖拽排序',
-  icon: () => 23,
+  icon: () => import('tdesign-icons-vue-next/esm/components/drag-move'),
 })
 const list = ref(new Array(10).fill('').map((_, i) => i))
 const changeItem = (s, e) => {

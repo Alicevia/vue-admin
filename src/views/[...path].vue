@@ -15,6 +15,9 @@
 definePage({
   title: 'ErrorPage',
   isMenu: false,
+  meta: {
+    title: 'ErrorPage',
+  },
 })
 const router = useRouter()
 

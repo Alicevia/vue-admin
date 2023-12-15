@@ -1,78 +1,58 @@
 <template>
-	<t-layout class="h-full gap-3 bg-fbase">
-		<t-aside v-model:collapsed="collapsed" collapsible>
-			<div class="flex gap-2 justify-center items-center p-2 font-bold 
-       text-xl  text-title overflow-hidden">
-				<LogoAppleFilledIcon></LogoAppleFilledIcon><span v-if="!collapsed"> ALICEVIA </span>
-			</div>
-			<div style="overflow: auto" class="h-[calc(100vh-112px)]">
-				<!-- <component :is="renderMenuList(userStore.menuList)"></component> -->
+	<t-layout class="h-full gap-2 !mr-2">
+		<t-aside width="fit-content">
+			<div style="overflow: auto" class="h-[calc(100vh-0px)]">
+				<component :is="renderMenuList(userStore.menuList)"></component>
 			</div>
 		</t-aside>
-		<t-layout class="overflow-hidden  gap-2">
-			<t-header class=" bg-over1">
-				<!-- <div :show-back="false">
-					<template #title>
-						<t-button shape="round" @click="collapsed=!collapsed">
-							<IconCaretRight v-if="collapsed"></IconCaretRight>
-							<IconCaretLeft v-else></IconCaretLeft>
-						</t-button>
-					</template>
-					<template #subtitle>
-						<t-breadcrumb>
-							<template #separator>
-						<ChevronRightIcon />
-							</template>
-
-							<t-breadcrumb-item v-for="item of breadcrumbList" :key="item.name">
-								<t-trigger trigger="hover">
-									<span>{{ item.title }}</span>
-									<template #content>
-										<component :is="renderMenuListInBreadcrumb([item])"></component>
-									</template>
-								</t-trigger>
-							</t-breadcrumb-item>
-						</t-breadcrumb>
-					</template>
-					<template #extra>
-						<t-space>
-							<template #split>
-								<t-divider direction="vertical">
-								</t-divider>
-							</template>
-							<t-button shape="circle" @click="toggle">
-								<template #icon>
-									<fullscreen-exit-1 v-if="isFullscreen"></fullscreen-exit-1> 
-							<Fullscreen1Icon else />
-								</template>
-							</t-button>
-							<t-button shape="circle" @click="themeStore.toggleTheme()">
-								<template #icon>
-									<sunny v-if="themeStore.isDark"></sunny>
-									<moon v-else></moon> 
-								</template>
-							</t-button>
-							<span>ALICEVIA</span>
-							<t-dropdown position="bl" trigger="hover">
-								<t-avatar :size="30" :style="{ backgroundColor: '#14a9f8' }">
-									<IconUser></IconUser>
-								</t-avatar>
-								<template #content>
-									<t-buton>
-										个人中心
-									</t-buton>
-									<t-buton>
-										退出
-									</t-buton>
-								</template>
+		<t-layout class="gap-2 h-full">
+			<t-header class="flex items-center rounded-bl-xl rounded-br-xl
+       flex-shrink-0 justify-between px-2">
+				<t-space align="center">
+					<t-button shape="round" theme="default"
+						@click="collapsed=!collapsed">
+						<template #icon>
+							<ChevronRightIcon v-if="collapsed"></ChevronRightIcon>
+							<ChevronLeftIcon v-else></ChevronLeftIcon>
+						</template>
+					</t-button>
+					<t-breadcrumb>
+						<t-breadcrumb-item v-for="item of breadcrumbList" :key="item.name" :to="item.name">
+							<t-dropdown v-if="item.children" :options="formatData(item.children)">
+								<span>{{ item.title }}</span>
 							</t-dropdown>
-						</t-space>
-					</template>
-				</div> -->
+							<span v-else>{{ item.title }}</span>
+						</t-breadcrumb-item>
+					</t-breadcrumb>
+				</t-space>
+				<t-space>
+					<t-button shape="circle" @click="toggle">
+						<FullscreenExitIcon v-if="isFullscreen"></FullscreenExitIcon>
+						<FullscreenIcon v-else></FullscreenIcon>
+					</t-button>
+					<t-button shape="circle" @click="themeStore.toggleTheme()">
+						<template #icon>
+							<SunnyIcon v-if="themeStore.isDark"></SunnyIcon>
+							<MoonIcon v-else></MoonIcon>
+						</template>
+					</t-button>
+					<t-dropdown position="bl" trigger="hover">
+						<t-avatar>
+							W
+						</t-avatar>
+						<t-dropdown-menu>
+							<t-dropdown-item>
+								个人中心
+							</t-dropdown-item>
+							<t-dropdown-item>
+								退出登录
+							</t-dropdown-item>
+						</t-dropdown-menu>
+					</t-dropdown>
+				</t-space>
 			</t-header>
 			<t-content class="flex flex-col gap-2">
 				<nav-record></nav-record>
-
 				<router-view v-slot="{ Component }">
 					<keep-alive>
 						<component :is="Component"></component>
@@ -83,13 +63,14 @@
 	</t-layout>
 </template>
 
-<script setup>
+<script setup lang="jsx">
 import { useUserStore, useThemeStore } from '@/store'
 import { Menu, MenuItem, Submenu } from 'tdesign-vue-next'
-import { Suspense, computed, defineAsyncComponent, h, onActivated, reactive, watch, watchEffect } from 'vue'
+import { Suspense, computed, defineAsyncComponent, h, reactive  } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useFullscreen } from '@vueuse/core'
 import NavRecord from './components/nav-record.vue'
+import { LogoAppleFilledIcon } from 'tdesign-icons-vue-next'
 
 const { isFullscreen,  toggle } = useFullscreen(document.documentElement)
 const userStore = useUserStore()
@@ -103,14 +84,19 @@ const findMenuByName = (menu, name) => {
     if(item.children) return !!findMenuByName(item.children, name)
   })
 }
- 
+
+const formatData =(list) => {
+  if(!list) return null
+  return list.map(item => {
+    return { ...item, content: item.title, value: item.name, children: formatData(item.children) }
+  })
+}
 const breadcrumbList = computed(() => {
-  const [name]=menuState.selectedKeys
+  const name=menuState.value
   if(!currentMenu.value) return []
- 
   return flatMenu([currentMenu.value], name)??[]
 })
- 
+
 const flatMenu = (menu, name, data=[]) => {
   for (let index = 0; index < menu.length; index++) {
     const item = menu[index]
@@ -129,49 +115,52 @@ const flatMenu = (menu, name, data=[]) => {
 
 
 const currentMenu = computed(() => {
-  const [name]=menuState.selectedKeys
+  const name=menuState.value
   return  findMenuByName(userStore.routes, name)
 })
 
 const collapsed = ref(false)
 const menuState = reactive({
-  collapsed: false,
-  selectedKeys: [],
-  openKeys: [],
-  'onUpdate:openKeys' (x){
-    menuState.openKeys=x
+  collapsed,
+  value: route.matched.filter(route => route.name).map(route => route.name).at(-1),
+  'onUpdate:value' (v){
+    menuState.value =v
   },
-  'onUpdate:selectedKeys' (x){
-    menuState.selectedKeys=x
+  expanded: route.matched.filter(route => route.name).map(route => route.name).slice(0, -1),
+  'onUpdate:expanded' (v){
+    menuState.expanded=v
   },
-  onMenuItemClick (path) {
+  onChange (path) {
     router.push({  path })
   },
 })
-watchEffect(() => {
-  const matchedPath = route.matched.filter(route => route.name).map(route => route.name)
-  menuState.selectedKeys= matchedPath.slice(-1)
-  menuState.openKeys= matchedPath.slice(0, -1)
-})
 
+ 
 const renderMenuList = (menuList) => {
-  return h(Menu, menuState,
-    () => menuList.map((item) => renderMenuItem(item)))
+  return h(Menu, menuState, {
+    default: () => menuList.map((item) => renderMenuItem(item)),
+    logo: () => <div class="flex  justify-center items-center !ml-6  gap-2
+      font-bold text-xl text-title overflow-hidden">
+      <LogoAppleFilledIcon></LogoAppleFilledIcon>
+      {!collapsed.value?<span> ALICEVIA </span>:null}  
+    </div>,
+  },
+  )
 }
 const renderMenuListInBreadcrumb = (menuList) => {
-  return h(Menu, { mode: 'pop',  onMenuItemClick: menuState.onMenuItemClick },
+  return h(Menu, {  onMenuItemClick: menuState.onMenuItemClick },
     () => menuList.map((item) => renderMenuItem(item, false)))
 }
 
 const renderMenuItem = (menu, renderIcon=true) => {
   if (menu.children) {
-    return h(Submenu, { title: menu.title, key: menu.name }, {
+    return h(Submenu, { title: menu.meta?.title, value: menu.name }, {
       default: () => menu.children.map((item) => renderMenuItem(item, renderIcon)),
       icon: renderIcon? () => suspense(menu.icon):null,
     })
   }
-  return h(MenuItem, { key: menu.name }, {
-    default: () => menu.title,
+  return h(MenuItem, { value: menu.name }, {
+    default: () => menu.meta?.title,
     icon: renderIcon?() => suspense(menu.icon):null,
   })
 }

@@ -1,87 +1,79 @@
 <template>
-	<p-table :columns="columns" :data="data" :pagination="pagination">
-		<template #title>
-			<t-button type="primary">
-				新建
-			</t-button>
-		</template>
-		<template #extra>
-			<t-space>
-				<t-button type="primary">
-					刷新数据
-				</t-button>
-				<t-button shape="circle"> 
-					<template #icon>
-						<RefreshIcon></RefreshIcon>
-					</template>
-				</t-button>
-				<t-button shape="circle">
-					<template #icon>
-						<Setting1Icon></Setting1Icon>
-					</template>
-				</t-button>
-			</t-space>
-		</template>
-	</p-table>
+	<div ref="root" class=" bg-anti overflow-auto " style="max-height: 100%;">
+		<t-table
+			row-key="index"
+			:data="data"
+			:columns="columns"
+			:pagination="pagination"
+			bordered>
+			<template #operation="{ row }">
+				<t-link theme="primary" hover="color" @click="rehandleClickOp(row)">
+					{{ row.status === 0 ? '查看详情' : '再次申请' }}
+				</t-link>
+			</template>
+		</t-table>   
+	</div>
 </template>
  
 
-<script setup>
-import { computed, reactive } from 'vue'
+<script setup lang="jsx">
+import { ref, computed, reactive } from 'vue'
+import { ErrorCircleFilledIcon, CheckCircleFilledIcon, CloseCircleFilledIcon } from 'tdesign-icons-vue-next'
+import { useElementSize } from '@vueuse/core'
+const root = ref()
+const { height }=useElementSize(root)
 definePage({
-  title: '表格展示',
-  icon: () => 23,
+  meta: {
+    title: '表格展示',
+  },
+  icon: () => import('tdesign-icons-vue-next/esm/components/table'),
 })
-
-
-const options = {
-  Beijing: ['Haidian', 'Chaoyang', 'Changping'],
-  Sichuan: ['Chengdu', 'Mianyang', 'Aba'],
-  Guangdong: ['Guangzhou', 'Shenzhen', 'Shantou'],
+ 
+ 
+const data = []
+const statusNameListMap = {
+  0: { label: '审批通过', theme: 'success', icon: <CheckCircleFilledIcon /> },
+  1: { label: '审批失败', theme: 'danger', icon: <CloseCircleFilledIcon /> },
+  2: { label: '审批过期', theme: 'warning', icon: <ErrorCircleFilledIcon /> },
 }
-const columns = [{
-  title: 'Name',
-  dataIndex: 'name',
-  slotName: 'name',
-}, {
-  title: 'Salary',
-  dataIndex: 'salary',
-}, {
-  title: 'Address',
-  dataIndex: 'address',
-}, {
-  title: 'Province',
-  dataIndex: 'province',
-  slotName: 'province',
-}, {
-  title: 'City',
-  dataIndex: 'city',
-  slotName: 'city',
-}, {
-  title: 'Email',
-  dataIndex: 'email',
-}]
-const pagination = reactive({
-  total: 40,
-  current: 1,
-  pageSize: 20,
-})
-
-const data = reactive(new Array(40).fill(0).map((_, i) => {
-  return {
-    key: i+1,
-    name: 'Jane Doe',
-    salary: 23000,
-    address: '32 Park Road, London',
-    province: 'Beijing',
-    city: 'Haidian',
-    email: 'jane.doe@example.com',
-  }
-}))
-
-const handleChange = (rowIndex) => {
-  data[rowIndex].city = ''
+for (let i = 0; i < 20; i++) {
+  data.push({
+    index: i + 1,
+    applicant: ['贾明', '张三', '王芳'][i % 3],
+    status: i % 3,
+    channel: ['电子签署', '纸质签署', '纸质签署'][i % 3],
+    detail: {
+      email: ['w.cezkdudy@lhll.au', 'r.nmgw@peurezgn.sl', 'p.cumx@rampblpa.ru'][i % 3],
+    },
+    matters: ['宣传物料制作费用', 'algolia 服务报销', '相关周边制作费', '激励奖品快递费'][i % 4],
+    time: [2, 3, 1, 4][i % 4],
+    createTime: ['2022-01-01', '2022-02-01', '2022-03-01', '2022-04-01', '2022-05-01'][i % 4],
+  })
 }
+const pagination = ref({ defaultCurrent: 1, defaultPageSize: 20, total: 20 })
+
+const tableLayout = ref('fixed')
+
+const columns = ref([
+  { colKey: 'applicant', title: '申请人', width: 100 },
+  {
+    colKey: 'status',
+    title: '审批状态',
+    width: 120,
+    cell: (h, { row }) => {
+      return (
+        <t-tag shape="round" theme={statusNameListMap[row.status].theme} variant="light-outline">
+          {statusNameListMap[row.status].icon}
+          {statusNameListMap[row.status].label}
+        </t-tag>
+      )
+    },
+  },
+  { colKey: 'matters', title: '申请事项', width: 150 },
+  { colKey: 'detail.email', title: '邮箱地址', width: 160, ellipsis: true },
+  { colKey: 'createTime', title: '申请日期', width: 120 },
+  { colKey: 'operation', title: '操作', width: 120 },
+])
 </script>
 <style scoped>
 </style>

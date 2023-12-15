@@ -8,7 +8,10 @@
 
 definePage({
   title: '首页',
-  icon: () => 23,
+  icon: () => import('tdesign-icons-vue-next/esm/components/home'),
+  meta: {
+    title: '首页',
+  },
 })
  
  

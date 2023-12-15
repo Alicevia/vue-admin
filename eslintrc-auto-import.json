@@ -68,6 +68,7 @@
     "watchEffect": "readonly",
     "watchPostEffect": "readonly",
     "watchSyncEffect": "readonly",
-    "renderIcon": "readonly"
+    "renderIcon": "readonly",
+    "TOTAL": "readonly"
   }
 }

@@ -2,11 +2,10 @@
 
 const colorKeys = ['brand', 'warning', 'error', 'success'  ]
 const colors = colorKeys.reduce((pre, name) => {
-  const keys= ['hover', 'focus', 'active', 'disabled', 'light']
+  const keys= ['hover', 'focus', 'active', 'disabled', 'light', 'light-hover']
   keys.forEach((key => {
-    pre[key]=`rgb(var(--td-${name}-color-${key}))`
+    pre[`${name}-${key}`]=`var(--td-${name}-color-${key})`
   }))
-  pre['base']=`rgb(var(--td-${name}-color))`
   
   return pre
 }, {})

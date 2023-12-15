@@ -5,6 +5,10 @@
 <script setup>
 definePage({
   title: '测试X级',
+  meta: {
+    title: '测试X级',
+    
+  },
 })
 </script>
 <style scoped>

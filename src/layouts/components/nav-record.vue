@@ -1,23 +1,26 @@
 <template>
-	<div ref="root" class="flex gap-2 overflow-hidden">
-		<t-button v-show="leftArrow" theme="default" variant="base"
+	<div ref="root" class="flex  gap-2 overflow-hidden">
+		<t-button v-show="isShowLeftArrow" theme="default"
+			variant="base"
 			shape="square" class="shrink-0"
 			@click="moveLeft">
 			<template #icon>
 				<ChevronLeftIcon></ChevronLeftIcon>
 			</template>
 		</t-button>
-		<div ref="tagsRef" class="flex gap-2 flex-1 overflow-hidden">
-			<t-tag v-for="(item) in tagList" :key="item.title" 
-				:checked="item.title==currentTag.select?.title"
-				checkable
-				class="!h-[28px] flex-shrink-0 "
-				:closable="!currentTag.isOnlyOne" size="medium" @close="removeTag(item)"
-				@check="selectTag(item)">
-				{{ item.title }}
-			</t-tag>
+		<div ref="tagsRef" class="flex gap-2 flex-1 flex-shrink-0 overflow-hidden">
+			<t-check-tag v-for="(item) in tagList" :key="item.title" 
+				:unchecked-props="{
+					class:'!bg-container'
+				}"
+				:checked="item.path==currentTag.select?.path"
+				class="flex-shrink-0 "
+				:closable="!currentTag.isOnlyOne" size="large" @close="removeTag(item)"
+				@click="selectTag(item)">
+				{{ item.meta.title }}
+			</t-check-tag>
 		</div>
-		<t-button v-show="rightArrow" theme="default" variant="base"
+		<t-button v-show="isShowRightArrow" theme="default" variant="base"
 			shape="square" class=" shrink-0"
 			@click="moveRight">
 			<template #icon>
@@ -57,18 +60,29 @@ import { useScroll, useEventListener, useMouseInElement, useElementSize, useMuta
 import { computed, nextTick, reactive, watch, watchEffect  } from 'vue'
 const tagsRef=ref()
 const root = ref()
+const route = useRoute()
 
-const tagList = ref(new Array(10).fill('').map((_, i) => ({
-  title: '智能abc'+i,
-})))
+const tagList = ref([])
+watchEffect(() => {
+  const record= tagList.value.find(item => item.path==route.path)
+  if(record){
+    currentTag.select = record
+    return 
+  }
+  if(route.meta.title){
+    tagList.value.push({ ...route })
+  }
+})
+
 const currentTag = reactive({
   select: null,
   isSelectLast: computed(() => tagList.value.at(-1)==currentTag.select), 
   isOnlyOne: computed(() => tagList.value.length==1),
 })
 currentTag.select = tagList.value.at(0)
-const {  elementX, elementWidth } = useMouseInElement(tagsRef)
-
+const {  elementX  } = useMouseInElement(tagsRef)
+const { width: elementWidth }=useElementSize(tagsRef)
+ 
 const selectTag=(item ) => {
    
   currentTag.select=item
@@ -81,31 +95,34 @@ const selectTag=(item ) => {
   }
 }
 const removeTag = (ite) => {
+  if(currentTag.isSelectLast){
+    nextTick(() => {
+      currentTag.select =tagList.value.at(-1)
+    })
+  }
   tagList.value= tagList.value.filter(item => item!=ite)
 }
 
+const isShowLeftArrow = ref(false)
+const isShowRightArrow = ref(false)
 
-const { width }=useElementSize(tagsRef)
-const tagsScrollWidth=ref(0)
-watchEffect(() => {
-  if(tagList.value.length){
-    nextTick(() => {
-      tagsScrollWidth.value = tagsRef.value?.scrollWidth
-    })
+
+const { x  } = useScroll(tagsRef, {
+  behavior: 'smooth',
+})
+ 
+watchPostEffect(() => {
+  if(!tagsRef.value||tagList.value.length==0) return
+  if(tagsRef.value.scrollWidth!=elementWidth.value){
+    isShowLeftArrow.value=!!x.value
+    isShowRightArrow.value = x.value!=(tagsRef.value.scrollWidth-elementWidth.value)
+  }else{
+    isShowLeftArrow.value=false
+    isShowRightArrow.value=false
   }
 })
  
-const showArrow = (v) => {
-  if(tagsScrollWidth.value <= width.value) return false
-  return !v
-}
-const leftArrow = computed(() => showArrow(arrivedState.left))
-const rightArrow = computed(() => showArrow(arrivedState.right))
 
-
-const { x, arrivedState } = useScroll(tagsRef, {
-  behavior: 'smooth',
-})
 const DIRECTION = {  LEFT: 'left', RIGHT: 'right' }
 const move = (direction) => {
   const len = 200
@@ -114,7 +131,7 @@ const move = (direction) => {
 }
 const moveLeft = () => move(DIRECTION.LEFT)
 const moveRight = () => move(DIRECTION.RIGHT)
-const cleanup = useEventListener(tagsRef, 'wheel', (e) => {
+useEventListener(tagsRef, 'wheel', (e) => {
   e.deltaY<0?moveRight():moveLeft()
 })
 </script>
