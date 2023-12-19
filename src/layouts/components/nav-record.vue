@@ -1,5 +1,5 @@
 <template>
-	<div ref="root" class="flex  gap-2 overflow-hidden">
+	<div ref="root" class="flex  gap-2 overflow-hidden flex-shrink-0">
 		<t-button v-show="isShowLeftArrow" theme="default"
 			variant="base"
 			shape="square" class="shrink-0"
@@ -35,7 +35,7 @@
 				</template>
 			</t-button>
 			<template #dropdown>
-				<t-button>
+				<t-button @click="refresh">
 					刷新
 				</t-button>
 				<t-button>
@@ -56,36 +56,52 @@
 </template>
 
 <script setup>
-import { useScroll, useEventListener, useMouseInElement, useElementSize, useMutationObserver } from '@vueuse/core'
+import { useRefreshCurrentRouter } from '@/views/refresh'
+import { useScroll, useEventListener, useMouseInElement, useElementSize } from '@vueuse/core'
 import { computed, nextTick, reactive, watch, watchEffect  } from 'vue'
+
+const { refresh }=useRefreshCurrentRouter()
 const tagsRef=ref()
 const root = ref()
 const route = useRoute()
+const router = useRouter()
 
 const tagList = ref([])
-watchEffect(() => {
-  const record= tagList.value.find(item => item.path==route.path)
-  if(record){
-    currentTag.select = record
-    return 
-  }
-  if(route.meta.title){
-    tagList.value.push({ ...route })
-  }
-})
+
 
 const currentTag = reactive({
   select: null,
   isSelectLast: computed(() => tagList.value.at(-1)==currentTag.select), 
   isOnlyOne: computed(() => tagList.value.length==1),
+  index: computed(() => {
+    if(currentTag.select){
+      return tagList.value.findIndex(item => item==currentTag.select)
+    }
+    return -1
+  }),
+  
 })
-currentTag.select = tagList.value.at(0)
+ 
+ 
+watch(() => route.fullPath, () => {
+  const record = tagList.value.find(item => item.path==route.path)
+  if(record){
+    currentTag.select = record
+    return 
+  }
+  
+  if(route.meta.title){
+    const temp = { ...route }
+    tagList.value.push(temp)
+    currentTag.select=temp
+  }
+}, { immediate: true })
 const {  elementX  } = useMouseInElement(tagsRef)
 const { width: elementWidth }=useElementSize(tagsRef)
  
 const selectTag=(item ) => {
    
-  currentTag.select=item
+  router.push(item)
   if(elementX.value/elementWidth.value>0.85){
     moveRight()
     return 
@@ -94,13 +110,20 @@ const selectTag=(item ) => {
     moveLeft()
   }
 }
-const removeTag = (ite) => {
-  if(currentTag.isSelectLast){
-    nextTick(() => {
-      currentTag.select =tagList.value.at(-1)
-    })
+const removeTag = (delItem) => {
+  if(delItem==currentTag.select){
+    if(currentTag.isSelectLast){
+      router.push(tagList.value[currentTag.index-1])
+    }else{
+      const index = currentTag.index
+      nextTick(() => {
+        router.push(tagList.value[index])
+      })
+    }
   }
-  tagList.value= tagList.value.filter(item => item!=ite)
+ 
+  tagList.value = tagList.value.filter(item => item!=delItem)
+ 
 }
 
 const isShowLeftArrow = ref(false)

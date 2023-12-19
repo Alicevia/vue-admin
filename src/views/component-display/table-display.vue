@@ -1,17 +1,18 @@
 <template>
-	<div ref="root" class=" bg-anti overflow-auto " style="max-height: 100%;">
+	<div ref="root" class="h-full bg-brand-hover">
 		<t-table
 			row-key="index"
 			:data="data"
 			:columns="columns"
 			:pagination="pagination"
+			:max-height="height-64"
 			bordered>
 			<template #operation="{ row }">
 				<t-link theme="primary" hover="color" @click="rehandleClickOp(row)">
 					{{ row.status === 0 ? '查看详情' : '再次申请' }}
 				</t-link>
 			</template>
-		</t-table>   
+		</t-table>    
 	</div>
 </template>
  
@@ -20,8 +21,7 @@
 import { ref, computed, reactive } from 'vue'
 import { ErrorCircleFilledIcon, CheckCircleFilledIcon, CloseCircleFilledIcon } from 'tdesign-icons-vue-next'
 import { useElementSize } from '@vueuse/core'
-const root = ref()
-const { height }=useElementSize(root)
+
 definePage({
   meta: {
     title: '表格展示',
@@ -29,7 +29,8 @@ definePage({
   icon: () => import('tdesign-icons-vue-next/esm/components/table'),
 })
  
- 
+const root = ref()
+const { height }=useElementSize(root)
 const data = []
 const statusNameListMap = {
   0: { label: '审批通过', theme: 'success', icon: <CheckCircleFilledIcon /> },

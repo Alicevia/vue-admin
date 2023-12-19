@@ -2,6 +2,7 @@ import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import jumpCode from 'vite-plugin-vue-inspector'
 import VueRouter from 'unplugin-vue-router/vite'
+import { getPascalCaseRouteName } from 'unplugin-vue-router'
 import AutoImportApi from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { TDesignResolver } from 'unplugin-vue-components/resolvers'
@@ -10,6 +11,9 @@ export const plugins = [
     routesFolder: 'src/views',
     exclude: ['**/components/**/*.(vue|jsx)'],
     extensions: ['.vue', '.jsx'],
+    getRouteName (node){
+      return node.value.rawSegment
+    },
   }),
   vue(),
   vueJsx(),

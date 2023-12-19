@@ -1,11 +1,11 @@
 <template>
-	<t-layout class="h-full gap-2 !mr-2">
+	<t-layout class="h-full gap-2 !mr-2 overflow-hidden">
 		<t-aside width="fit-content">
 			<div style="overflow: auto" class="h-[calc(100vh-0px)]">
 				<component :is="renderMenuList(userStore.menuList)"></component>
 			</div>
 		</t-aside>
-		<t-layout class="gap-2 h-full">
+		<t-layout class="gap-2 overflow-hidden">
 			<t-header class="flex items-center rounded-bl-xl rounded-br-xl
        flex-shrink-0 justify-between px-2">
 				<t-space align="center">
@@ -51,13 +51,9 @@
 					</t-dropdown>
 				</t-space>
 			</t-header>
-			<t-content class="flex flex-col gap-2">
-				<nav-record></nav-record>
-				<router-view v-slot="{ Component }">
-					<keep-alive>
-						<component :is="Component"></component>
-					</keep-alive>
-				</router-view>  
+			<nav-record></nav-record>
+			<t-content class="flex-1 overflow-hidden">
+				<AppKeepAlive></AppKeepAlive>
 			</t-content>
 		</t-layout>
 	</t-layout>
@@ -71,13 +67,14 @@ import { useRoute, useRouter } from 'vue-router'
 import { useFullscreen } from '@vueuse/core'
 import NavRecord from './components/nav-record.vue'
 import { LogoAppleFilledIcon } from 'tdesign-icons-vue-next'
-
 const { isFullscreen,  toggle } = useFullscreen(document.documentElement)
 const userStore = useUserStore()
 const themeStore = useThemeStore()
 const router = useRouter()
 const route = useRoute()
+const include=ref([]) 
 
+ 
 const findMenuByName = (menu, name) => {
   return menu.find(item => {
     if(item.name==name) return true
@@ -130,12 +127,17 @@ const menuState = reactive({
   'onUpdate:expanded' (v){
     menuState.expanded=v
   },
-  onChange (path) {
-    router.push({  path })
+  onChange (name) {
+    router.push({  name })
   },
 })
 
- 
+watchEffect(() => {
+  menuState.value = route.name
+  if(route.meta.isKeepAlive){
+    include.value=[...new Set([...include.value, route.name, 'test'])]
+  }
+})
 const renderMenuList = (menuList) => {
   return h(Menu, menuState, {
     default: () => menuList.map((item) => renderMenuItem(item)),

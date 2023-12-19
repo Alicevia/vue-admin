@@ -1,5 +1,12 @@
 import {  useRouter } from 'vue-router'
 
+export const useRefreshCurrentRouter = () => {
+  const router = useRouter()
+  const refresh = () => {
+    router.replace('/refresh')
+  }
+  return { refresh }
+}
 
 export default defineComponent(() => {
   const router = useRouter()
@@ -8,7 +15,6 @@ export default defineComponent(() => {
     return (
       <div>
         23
-
       </div>
     )
   }
