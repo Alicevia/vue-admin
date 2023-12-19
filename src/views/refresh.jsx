@@ -3,7 +3,7 @@ import {  useRouter } from 'vue-router'
 export const useRefreshCurrentRouter = () => {
   const router = useRouter()
   const refresh = () => {
-    router.replace('/refresh')
+    router.push('/refresh')
   }
   return { refresh }
 }

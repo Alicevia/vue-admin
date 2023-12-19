@@ -19,29 +19,62 @@
 					<t-breadcrumb>
 						<t-breadcrumb-item v-for="item of breadcrumbList" :key="item.name" :to="item.name">
 							<t-dropdown v-if="item.children" :options="formatData(item.children)">
-								<span>{{ item.title }}</span>
+								<span>{{ item.meta?.title }}</span>
 							</t-dropdown>
-							<span v-else>{{ item.title }}</span>
+							<span v-else>{{ item.meta?.title }}</span>
 						</t-breadcrumb-item>
 					</t-breadcrumb>
 				</t-space>
-				<t-space>
-					<t-button shape="circle" @click="toggle">
+				<t-space align="center">
+					<t-button n theme="default" shape="circle"
+						@click="toggle">
 						<FullscreenExitIcon v-if="isFullscreen"></FullscreenExitIcon>
 						<FullscreenIcon v-else></FullscreenIcon>
 					</t-button>
-					<t-button shape="circle" @click="themeStore.toggleTheme()">
+					<t-button theme="default" shape="circle"
+						@click="themeStore.toggleTheme()">
 						<template #icon>
 							<SunnyIcon v-if="themeStore.isDark"></SunnyIcon>
 							<MoonIcon v-else></MoonIcon>
 						</template>
 					</t-button>
+					<t-popup placement="bottom-right" show-arrow>
+						<t-button theme="default" shape="circle">
+							<template #icon>
+								<ChatErrorIcon></ChatErrorIcon>
+							</template>
+						</t-button>
+
+						<!-- <div slot="content">触发元素是指触发浮层内容显示的元素</div> -->
+						<template #content>
+							<t-tabs value="first">
+								<t-tab-panel value="first" label="通知">
+									<p style="padding: 25px">
+										选项卡1
+									</p>
+								</t-tab-panel>
+								<t-tab-panel value="second" label="关注">
+									<p style="padding: 25px">
+										选项卡2
+									</p>
+								</t-tab-panel>
+								<t-tab-panel value="third" label="待办">
+									<p style="padding: 25px">
+										选项卡3
+									</p>
+								</t-tab-panel>
+							</t-tabs>
+						</template>
+					</t-popup>
+	
+					<t-divider layout="vertical" class="!mx-0"></t-divider>
+					<span>ALICEVIA</span>
 					<t-dropdown position="bl" trigger="hover">
 						<t-avatar>
 							W
 						</t-avatar>
 						<t-dropdown-menu>
-							<t-dropdown-item>
+							<t-dropdown-item @click="router.push({name:'account'})">
 								个人中心
 							</t-dropdown-item>
 							<t-dropdown-item>
@@ -85,7 +118,7 @@ const findMenuByName = (menu, name) => {
 const formatData =(list) => {
   if(!list) return null
   return list.map(item => {
-    return { ...item, content: item.title, value: item.name, children: formatData(item.children) }
+    return { ...item, content: item.meta.title, value: item.name, children: formatData(item.children) }
   })
 }
 const breadcrumbList = computed(() => {
@@ -118,6 +151,7 @@ const currentMenu = computed(() => {
 
 const collapsed = ref(false)
 const menuState = reactive({
+  theme: 'dark',
   collapsed,
   value: route.matched.filter(route => route.name).map(route => route.name).at(-1),
   'onUpdate:value' (v){
@@ -144,15 +178,12 @@ const renderMenuList = (menuList) => {
     logo: () => <div class="flex  justify-center items-center !ml-6  gap-2
       font-bold text-xl text-title overflow-hidden">
       <LogoAppleFilledIcon></LogoAppleFilledIcon>
-      {!collapsed.value?<span> ALICEVIA </span>:null}  
+      {!collapsed.value?<span> ALICEVIA PRO </span>:null}  
     </div>,
   },
   )
 }
-const renderMenuListInBreadcrumb = (menuList) => {
-  return h(Menu, {  onMenuItemClick: menuState.onMenuItemClick },
-    () => menuList.map((item) => renderMenuItem(item, false)))
-}
+ 
 
 const renderMenuItem = (menu, renderIcon=true) => {
   if (menu.children) {

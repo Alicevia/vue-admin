@@ -4,7 +4,7 @@ import { computed } from 'vue'
 
 const generateMenuList = (routes) => {
   return routes.filter((item) => {
-    if (item.meta?.title && item.isMenu !==false) {
+    if (item.meta?.title && item.meta?.isMenu !==false) {
       if (item.children && item.children.length > 0) {
         item.children = generateMenuList(item.children)
       }

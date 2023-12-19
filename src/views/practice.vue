@@ -12,6 +12,7 @@
 definePage({
   meta: {
     title: '练习室',
+    
   },
 
   icon: () => import('tdesign-icons-vue-next/esm/components/relativity'),

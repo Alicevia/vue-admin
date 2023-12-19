@@ -38,16 +38,16 @@
 				<t-button @click="refresh">
 					刷新
 				</t-button>
-				<t-button>
+				<t-button @click="removeTag(currentTag.select)">
 					关闭当前
 				</t-button>
-				<t-button>
+				<t-button @click="removeOtherTag">
 					关闭其他
 				</t-button>
-				<t-button>
+				<t-button @click="removeLeftTag">
 					关闭左侧
 				</t-button>
-				<t-button>
+				<t-button @click="removeRightTag">
 					关闭右侧
 				</t-button>
 			</template>
@@ -58,8 +58,8 @@
 <script setup>
 import { useRefreshCurrentRouter } from '@/views/refresh'
 import { useScroll, useEventListener, useMouseInElement, useElementSize } from '@vueuse/core'
-import { computed, nextTick, reactive, watch, watchEffect  } from 'vue'
-
+import { computed, nextTick, reactive, watch   } from 'vue'
+import { MessagePlugin } from 'tdesign-vue-next'
 const { refresh }=useRefreshCurrentRouter()
 const tagsRef=ref()
 const root = ref()
@@ -84,6 +84,7 @@ const currentTag = reactive({
  
  
 watch(() => route.fullPath, () => {
+  if(route.meta.isMenu==false) return
   const record = tagList.value.find(item => item.path==route.path)
   if(record){
     currentTag.select = record
@@ -111,6 +112,7 @@ const selectTag=(item ) => {
   }
 }
 const removeTag = (delItem) => {
+  if(currentTag.isOnlyOne) return MessagePlugin.warning('须保留一个模块')
   if(delItem==currentTag.select){
     if(currentTag.isSelectLast){
       router.push(tagList.value[currentTag.index-1])
@@ -125,7 +127,17 @@ const removeTag = (delItem) => {
   tagList.value = tagList.value.filter(item => item!=delItem)
  
 }
+const removeOtherTag = () => {
+  tagList.value = tagList.value.filter(item => item==currentTag.select)
+}
+const removeLeftTag = () => {
+  tagList.value = tagList.value.slice(currentTag.index)
 
+}
+const removeRightTag = () => {
+  tagList.value = tagList.value.slice(0, currentTag.index+1)
+
+}
 const isShowLeftArrow = ref(false)
 const isShowRightArrow = ref(false)
 

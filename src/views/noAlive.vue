@@ -11,6 +11,8 @@ definePage({
     title: '没有Alive',
     isKeepAlive: false,
   },
+  icon: () => import('tdesign-icons-vue-next/esm/components/relativity'),
+
 })
 // 23
 </script>

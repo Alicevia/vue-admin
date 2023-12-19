@@ -1,28 +1,28 @@
 <template>
-	<t-result status="404" subtitle="系统中不存在当前URL,请检查">
-		<template #extra>
+	<t-card title="当前页面不存在">
+		<template #actions>
 			<t-space>
-				<t-button type="primary" @click="goHome">
+				<t-button theme="primary" @click="goHome">
 					去首页
 				</t-button>
 			</t-space>
 		</template>
-	</t-result>
+	</t-card>
 </template>
 
 <script setup lang="jsx">
 
 definePage({
-  title: 'ErrorPage',
-  isMenu: false,
   meta: {
     title: 'ErrorPage',
+    isMenu: false,
+
   },
 })
 const router = useRouter()
 
 const goHome = () => {
-  router.replace({ path: '/test/test2/test3/test4' })
+  router.replace({ path: '/' })
 }
  
  
