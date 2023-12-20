@@ -1,28 +1,33 @@
 <template>
-	<div>
-		<t-form ref="formRef" :model="form" :style="{ width: '600px' }">
-			<t-form-item field="name" label="Username" :rules="rules">
-				<t-input v-model="form.name" a="232;lk" sdfljk="'asdfljk laksdjf'"
-					placeholder="please enter your username...">
-				</t-input>
-			</t-form-item>
-			<t-form-item field="post"
-				label="Post">
-				<t-input v-model="form.post"
-					placeholder="please enter your post...">
-				</t-input>
-			</t-form-item>
-			<t-form-item field="isRead">
-				<t-checkbox v-model="form.isRead">
-					I have read the manual
-				</t-checkbox>
-			</t-form-item>
-			<t-form-item>
-				<t-button @click="handleClick">
-					Set Status
-				</t-button>
-			</t-form-item>
-		</t-form>
+	<div class="flex h-full">
+		<div class="!m-auto">
+			<t-form ref="form" :data="formData"
+				:colon="true"
+				:label-width="0" @reset="onReset" @submit="onSubmit">
+				<t-form-item name="account">
+					<t-input v-model="formData.account" clearable placeholder="请输入账户名">
+						<template #prefix-icon>
+							<desktop-icon></desktop-icon>
+						</template>
+					</t-input>
+				</t-form-item>
+
+				<t-form-item name="password">
+					<t-input v-model="formData.password" type="password" clearable
+						placeholder="请输入密码">
+						<template #prefix-icon>
+							<lock-on-icon></lock-on-icon>
+						</template>
+					</t-input>
+				</t-form-item>
+
+				<t-form-item>
+					<t-button theme="primary" type="submit" block>
+						登录
+					</t-button>
+				</t-form-item>
+			</t-form>
+		</div>
 	</div>
 </template>
 
@@ -30,37 +35,26 @@
 definePage({
   layout: false,
 })
-const formRef = ref()
-const form = reactive({
-  name: '',
-  post: '',
-  isRead: false,
+import { reactive } from 'vue'
+import { MessagePlugin } from 'tdesign-vue-next'
+import { DesktopIcon, LockOnIcon } from 'tdesign-icons-vue-next'
+
+const formData = reactive({
+  account: '',
+  password: '',
 })
-const rules = [
-  {
-    validator: (value, cb) => {
-      return new Promise((resolve) => {
-        window.setTimeout(() => {
-          if (value !== 'admin') {
-            cb('name must be admin')
-          }
-          resolve()
-        }, 2000)
-      })
-    },
-  },
-]
-const handleClick = () => {
-  formRef.value.setFields({
-    name: {
-      status: 'error',
-      message: 'async name error',
-    },
-    post: {
-      status: 'error',
-      message: 'valid post',
-    },
-  })
+
+const onReset = () => {
+  MessagePlugin.success('重置成功')
+}
+
+const onSubmit = ({ validateResult, firstError }) => {
+  if (validateResult === true) {
+    MessagePlugin.success('提交成功')
+  } else {
+    console.log('Validate Errors: ', firstError, validateResult)
+    MessagePlugin.warning(firstError)
+  }
 }
 </script>
 <style scoped></style>

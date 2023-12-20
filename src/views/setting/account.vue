@@ -1,5 +1,5 @@
 <template>
-	<t-tabs v-model="value">
+	<t-tabs v-model="value" class="h-full">
 		<t-tab-panel :value="1" label="账户信息" :destroy-on-hide="false">
 			<UserInfo></UserInfo>
 		</t-tab-panel>

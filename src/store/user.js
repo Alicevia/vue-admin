@@ -16,9 +16,7 @@ export const useUserStore = defineStore('user', () => {
   const menuList = computed(() => {
     return generateMenuList(routes)
   })
-  console.log(menuList.value)
   const include = computed(() => findKeepAlive(routes))
-  console.log(include.value)
   return { menuList, routes, include }
 })
  
